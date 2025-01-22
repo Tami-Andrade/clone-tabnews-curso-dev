@@ -13,6 +13,16 @@ O projeto é a construção de uma réplica do [TabNews](https://www.tabnews.com
 - `react@18.2.0`
 - `react-dom@18.2.0`
 
+## Variáveis de ambiente
+Crie o arquivo de variáveis de ambiente na raiz do repositório para subir o banco de dados localmente.
+`
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=local_user
+POSTGRES_DB=local_db
+POSTGRES_PASSWORD=local_password
+`
+
 ### Breve descrição
 
 - Node.js: Coração do servidor, executando o JavaScript.
