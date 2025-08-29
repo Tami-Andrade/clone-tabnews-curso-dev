@@ -9,7 +9,7 @@ test("GET to /api/v1/status should return 200", async () => {
   expect(responseBody.updated_at).toBe(parseUpdatedAt);
 
   expect(responseBody.database.version).not.toBe(null);
-  expect(responseBody.database.alive_connections).toBeGreaterThan(0);
+  expect(responseBody.database.alive_connections).toEqual(1);
 
   console.log(responseBody);
 });
