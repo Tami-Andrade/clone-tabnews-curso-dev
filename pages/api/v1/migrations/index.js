@@ -3,7 +3,16 @@ import { join } from "node:path";
 import database from "infra/database";
 
 export default async function migrations(request, response) {
-  const dbClient = await database.getNewClient();
+  const allowedMethods = ['GET','POST'];
+  if (!allowedMethods.includes(request.method)){
+    return response.status(405).json({ message: "Method not allowed" })
+  }
+
+  let dbClient;
+
+  try{
+    
+  dbClient = await database.getNewClient();
   const defaultDatabaseConfiguration = {
     dbClient: dbClient,
     dryRun: true,
@@ -18,21 +27,26 @@ export default async function migrations(request, response) {
     const pendentMigrations = await migrationRunner(
       defaultDatabaseConfiguration,
     );
-    await dbClient.end();
     response.status(200).json(pendentMigrations);
   }
+
   if (request.method === "POST") {
     console.log("POST method");
     const migratedMigrations = await migrationRunner({
       ...defaultDatabaseConfiguration,
       dryRun: false,
     });
-    await dbClient.end();
+
     if (migratedMigrations.length > 0) {
       response.status(201).json(migratedMigrations);
     }
     response.status(200).json(migratedMigrations);
   }
+} catch(error){
+  console.log(error)
+  throw error;
+}finally{
+  dbClient.end()
+}
 
-  response.status(405).json({ message: "Method not allowed" });
 }
